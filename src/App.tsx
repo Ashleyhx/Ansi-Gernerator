@@ -2,7 +2,18 @@ import {useEffect, useState} from 'react'
 import './App.css'
 import '@mantine/core/styles.css';
 import Ansi from "ansi-to-react";
-import {ColorPicker, Stack, Text, Title} from '@mantine/core';
+import {
+    ActionIcon,
+    Button,
+    ColorPicker,
+    CopyButton,
+    MantineColor,
+    rem,
+    Stack,
+    Text,
+    Title,
+    Tooltip
+} from '@mantine/core';
 import {Container} from "postcss";
 
 function App() {
@@ -22,7 +33,7 @@ function App() {
     useEffect(() => {
         const cleanColor = background.replace('rgba(', '').replace(')', '');
         const [r, g, b, a] = cleanColor.split(',').map((value) => parseInt(value, 10) || 0);
-        setAnsiCodeBackground(`\x1b[48;2;${r};${g};${b}m`);
+        setAnsiCodeBackground(`\x1b[48;2;${r};${g};${b}m\x1b[4m`);
         setTextBackground(`\\x1b[48;2;${r};${g};${b}m`);
     }, [background]);
 
@@ -30,10 +41,29 @@ function App() {
   return (
       <>
           <h1>Ansi Code Generator</h1>
-          <p>RGB ANSI Code is: {textCode} {textBackground}</p>
-          <h2><Ansi>{`${ansiCodeText} ${ansiCodeBackground} Test`}</Ansi></h2>
+          <p>RGB ANSI Code is: {textCode + textBackground}</p>
 
-          <h2> COLOR IS {color}</h2>
+          <CopyButton value={textCode + textBackground}>
+              {({ copied, copy }) => (
+                  <Button
+                      color={(copied ? 'teal' : 'blue') as MantineColor}
+                      onClick={copy}
+                  >
+                      {copied ? 'Copied' : 'Copy'}
+                  </Button>
+              )}
+          </CopyButton>
+
+          <CopyButton value="https://mantine.dev" timeout={2000}>
+              {({ copied, copy }) => (
+                  <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
+                      <ActionIcon color={(copied ? 'teal' : 'blue') as MantineColor} variant="subtle" onClick={copy}>
+                      </ActionIcon>
+                  </Tooltip>
+              )}
+          </CopyButton>
+          <h2><Ansi>{`${ansiCodeText}${ansiCodeBackground} Test`}</Ansi></h2>
+
 
           <h3> Text color </h3>
           <Stack>
@@ -44,8 +74,6 @@ function App() {
           <Stack>
               <ColorPicker format="rgba" value={background} onChange={setBackground} />
           </Stack>
-
-          <p> AnsiCode is {ansiCodeText}</p>
       </>
   )
 }
