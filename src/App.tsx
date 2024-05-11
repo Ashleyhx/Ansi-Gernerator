@@ -28,7 +28,7 @@ function App() {
   const [background, setBackground] = useState('rgba(0, 255, 0, 1)');
     useEffect(() => {
         const cleanColor = background.replace('rgba(', '').replace(')', '');
-        const [r, g, b, a] = cleanColor.split(',').map((value) => parseInt(value, 10) || 0);
+        const [r, g, b] = cleanColor.split(',').map((value) => parseInt(value, 10) || 0);
         setAnsiCodeBackground(`\x1b[48;2;${r};${g};${b}m\x1b[4m`);
         setTextBackground(`\\x1b[48;2;${r};${g};${b}m`);
     }, [background]);
