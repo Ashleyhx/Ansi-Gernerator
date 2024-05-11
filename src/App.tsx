@@ -8,13 +8,9 @@ import {
     ColorPicker,
     CopyButton,
     MantineColor,
-    rem,
     Stack,
-    Text,
-    Title,
     Tooltip
 } from '@mantine/core';
-import {Container} from "postcss";
 
 function App() {
   const [ansiCodeText, setAnsiCodeText] = useState('');
@@ -24,7 +20,7 @@ function App() {
   const [color, setColor] = useState('rgba(255, 0, 0, 1)');
     useEffect(() => {
         const cleanColor = color.replace('rgba(', '').replace(')', '');
-        const [r, g, b, a] = cleanColor.split(',').map((value) => parseInt(value, 10) || 0);
+        const [r, g, b] = cleanColor.split(',').map((value) => parseInt(value, 10) || 0);
         setAnsiCodeText(`\x1b[38;2;${r};${g};${b}m `);
         setText(`\\x1b[38;2;${r};${g};${b}m `);
     }, [color]);
