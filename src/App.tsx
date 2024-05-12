@@ -63,7 +63,7 @@ function App() {
         setTextBackground(`\\x1b[48;2;${r};${g};${b}`);
     }, [background]);
 
-    const toggleStyle = (styleProp) => {
+    const toggleStyle = (styleProp: string) => {
         setTextStyle(prevStyle => {
             if (!styleProp) return prevStyle;
             if (styleProp === 'fontWeight') {
@@ -103,7 +103,7 @@ function App() {
         setTextStyle({
             fontWeight: 'normal',
             fontStyle: 'normal',
-            textDecoration: [],
+            textDecoration: [] = [],
         });
         setColor('');
         setBackground('');
@@ -120,7 +120,6 @@ function App() {
                   <p>RGB ANSI Code is: {textCode + textBackground + styleCode + (textBackground || styleCode? 'm' : '')}</p>
 
                   <CopyButton
-                      // color='#261168'
                       value={textCode + textBackground + styleCode + (textBackground || styleCode? 'm' : '')}>
                       {({copied, copy}) => (
                           <Button
