@@ -29,16 +29,23 @@ const boxStyleButtons: React.CSSProperties = {
 };
 
 function App() {
-  const [ansiCodeText, setAnsiCodeText] = useState('');
-  const [ansiCodeBackground, setAnsiCodeBackground] = useState('');
-  const [ansiCodeStyle, setAnsiCodeStyle] = useState(';4m');
+  // const [ansiCodeText, setAnsiCodeText] = useState('');
+  // const [ansiCodeBackground, setAnsiCodeBackground] = useState('');
+  // const [ansiCodeStyle, setAnsiCodeStyle] = useState(';3;4m');
+  const [textStyle, setTextStyle] = useState({
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      textDecoration: 'none',
+      backgroundColor: 'transparent' // Assuming you want to change this too
+  });
+  const [styleCode, setStyleCode] = useState('');
   const [textCode, setText] = useState('');
   const [textBackground, setTextBackground] = useState('');
   const [color, setColor] = useState('rgba(255, 0, 0, 1)');
     useEffect(() => {
         const cleanColor = color.replace('rgba(', '').replace(')', '');
         const [r, g, b] = cleanColor.split(',').map((value) => parseInt(value, 10) || 0);
-        setAnsiCodeText(`\x1b[38;2;${r};${g};${b}m `);
+        // setAnsiCodeText(`\x1b[38;2;${r};${g};${b}m `);
         setText(`\\x1b[38;2;${r};${g};${b}m `);
     }, [color]);
 
@@ -46,15 +53,23 @@ function App() {
     useEffect(() => {
         const cleanColor = background.replace('rgba(', '').replace(')', '');
         const [r, g, b] = cleanColor.split(',').map((value) => parseInt(value, 10) || 0);
-        setAnsiCodeBackground(`\x1b[48;2;${r};${g};${b}`);
+        // setAnsiCodeBackground(`\x1b[48;2;${r};${g};${b}`);
         setTextBackground(`\\x1b[48;2;${r};${g};${b}`);
     }, [background]);
+
+  const toggleStyle = (styleProp) => {
+     setTextStyle(prevStyle => ({
+            ...prevStyle,
+            [styleProp]: prevStyle[styleProp] === 'normal' || prevStyle[styleProp] === 'none' ?
+                (styleProp === 'fontWeight' ? 'bold' : styleProp === 'fontStyle' ? 'italic' : 'line-through') : 'normal'
+     }));
+  };
 
   return (
       <Layout>
           <Header color='white'>Ansi Code Generator</Header>
           <Content>
-              <p>RGB ANSI Code is: {textCode + textBackground}</p>
+              <p>RGB ANSI Code is: {textCode + textBackground + 'm'}</p>
 
               <CopyButton value={textCode + textBackground}>
                   {({copied, copy}) => (
@@ -67,16 +82,24 @@ function App() {
                   )}
               </CopyButton>
 
-              <CopyButton value="https://mantine.dev" timeout={2000}>
-                  {({copied, copy}) => (
-                      <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
-                          <ActionIcon color={(copied ? 'teal' : 'blue') as MantineColor} variant="subtle"
-                                      onClick={copy}>
-                          </ActionIcon>
-                      </Tooltip>
-                  )}
-              </CopyButton>
-              <h2><Ansi>{`${ansiCodeText}${ansiCodeBackground}${ansiCodeStyle}  Test`}</Ansi></h2>
+              {/*<CopyButton value="https://mantine.dev" timeout={2000}>*/}
+              {/*    {({copied, copy}) => (*/}
+              {/*        <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">*/}
+              {/*            <ActionIcon color={(copied ? 'teal' : 'blue') as MantineColor} variant="subtle"*/}
+              {/*                        onClick={copy}>*/}
+              {/*            </ActionIcon>*/}
+              {/*        </Tooltip>*/}
+              {/*    )}*/}
+              {/*</CopyButton>*/}
+
+              {/*<h2><Ansi>{`${ansiCodeText}${ansiCodeBackground}${ansiCodeStyle}  Test`}</Ansi></h2>*/}
+              <h2>
+                  <span style={{color: color}}>
+                    <span style={{backgroundColor: background,}}>
+                        <span style={textStyle}>Test</span>
+                    </span>
+                  </span>
+              </h2>
 
               <Flex style={boxStyle} justify='center' align='center' gap='large'>
                   <Stack>
@@ -92,17 +115,25 @@ function App() {
 
               <Flex style={boxStyleButtons} justify='center' align='center' gap='middle'>
                   <h3> Styles: </h3>
-                  <Button>
-                      Bold
+                  <Button
+                      color={(textStyle["fontWeight"] === 'bold' ? 'blue' : 'gray') as MantineColor}
+                      onClick={() => toggleStyle('fontWeight')}>
+                      Toggle Bold
                   </Button>
-                  <Button>
-                        Italic
+                  <Button
+                      color={(textStyle["fontStyle"] === 'italic' ? 'blue' : 'gray') as MantineColor}
+                      onClick={() => toggleStyle('fontStyle')}>
+                      Toggle Italic
                   </Button>
-                  <Button>
-                        Underline
+                  <Button
+                      color={(textStyle["textDecoration"] === 'line-through' ? 'blue' : 'gray') as MantineColor}
+                      onClick={() => toggleStyle('textDecoration')}>
+                      Toggle Underline
                   </Button>
-                  <Button>
-                      Strickthrough
+                  <Button
+                      color={(textStyle["textDecoration"] === 'line-through' ? 'blue' : 'gray') as MantineColor}
+                      onClick={() => toggleStyle('textDecoration')}>
+                      Toggle Strikethrough
                   </Button>
               </Flex>
 
