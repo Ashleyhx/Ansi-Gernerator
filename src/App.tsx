@@ -32,8 +32,14 @@ const boxStyleButtons: React.CSSProperties = {
     border: '1px solid #40a9ff',
 };
 
+interface TextStyle {
+    fontWeight: 'normal' | 'bold';
+    fontStyle: 'normal' | 'italic';
+    textDecoration: string[];  // Specify as an array of strings
+}
+
 function App() {
-    const [textStyle, setTextStyle] = useState({
+    const [textStyle, setTextStyle] = useState<TextStyle>({
         fontWeight: 'normal',
         fontStyle: 'normal',
         textDecoration: [],
