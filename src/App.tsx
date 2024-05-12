@@ -124,10 +124,16 @@ function App() {
           <Header style={headerStyle}>Ansi Code Generator</Header>
           <Content>
               <Flex justify='center' align='center' gap='small'>
-                  <p>RGB ANSI Code is: {textCode + textBackground + styleCode + (textBackground || styleCode? 'm' : '')}</p>
+                  <p>RGB ANSI Code is: {textCode + textBackground
+                      + (styleCode && !textBackground ? `\\x1b[` : '')
+                      + (!textBackground && styleCode ? styleCode.substring(1) : styleCode + '')
+                      + (textBackground || styleCode? 'm' : '')}</p>
 
                   <CopyButton
-                      value={textCode + textBackground + styleCode + (textBackground || styleCode? 'm' : '')}>
+                      value={textCode + textBackground
+                          + (styleCode && !textBackground ? `\\x1b[` : 'AA')
+                          + (!textBackground && styleCode ? styleCode.substring(1) : styleCode + 'BB')
+                          + (textBackground || styleCode? 'm' : '')}>
                       {({copied, copy}) => (
                           <Button
                               color={(copied ? 'teal' : '#7a74c6') as MantineColor}
