@@ -12,8 +12,8 @@ import {Flex, Layout} from "antd";
 import {Header, Content} from "antd/lib/layout/layout";
 
 const headerStyle: React.CSSProperties = {
-    color: 'white',
-    backgroundColor: '#261168',
+    color: '#d9d9e8',
+    backgroundColor: '#4618bc',
     fontWeight: 'bold',
     fontSize: 24,
 
@@ -23,14 +23,14 @@ const boxStyle: React.CSSProperties = {
     width: '100%',
     height: 320,
     borderRadius: 6,
-    border: '1px solid #40a9ff',
+    border: '2px dotted #a1a0c8',
 };
 
 const boxStyleButtons: React.CSSProperties = {
     width: '100%',
     height: 120,
     borderRadius: 6,
-    border: '1px solid #40a9ff',
+    border: '2px dotted #a1a0c8',
 };
 
 interface TextStyle {
@@ -124,10 +124,12 @@ function App() {
           <Header style={headerStyle}>Ansi Code Generator</Header>
           <Content>
               <Flex justify='center' align='center' gap='small'>
-                  <p>RGB ANSI Code is: {textCode + textBackground
-                      + (styleCode && !textBackground ? `\\x1b[` : '')
-                      + (!textBackground && styleCode ? styleCode.substring(1) : styleCode + '')
-                      + (textBackground || styleCode? 'm' : '')}</p>
+                  {/*<b> RGB ANSI Code is:</b>*/}
+                  <p><b> RGB ANSI Code is:</b>
+                      {textCode + textBackground
+                          + (styleCode && !textBackground ? `\\x1b[` : '')
+                          + (!textBackground && styleCode ? styleCode.substring(1) : styleCode + '')
+                          + (textBackground || styleCode ? 'm' : '')}</p>
 
                   <CopyButton
                       value={textCode + textBackground
@@ -136,7 +138,7 @@ function App() {
                           + (textBackground || styleCode? 'm' : '')}>
                       {({copied, copy}) => (
                           <Button
-                              color={(copied ? 'teal' : '#7a74c6') as MantineColor}
+                              color={(copied ? 'teal' : '#978ef0') as MantineColor}
                               onClick={copy}
                           >
                               {copied ? 'Copied' : 'Copy'}
@@ -144,7 +146,7 @@ function App() {
                       )}
                   </CopyButton>
                   <Button
-                      color='#7a74c6'
+                      color='#978ef0'
                       onClick={reset}
                   >
                       Reset
@@ -183,22 +185,22 @@ function App() {
               <Flex style={boxStyleButtons} justify='center' align='center' gap='middle'>
                   <h3> Styles: </h3>
                   <Button
-                      color={(textStyle["fontWeight"] === 'bold' ? 'blue' : 'gray') as MantineColor}
+                      color={(textStyle["fontWeight"] === 'bold' ? 'teal' : '#978ef0') as MantineColor}
                       onClick={() => toggleStyle('fontWeight')}>
                       Toggle Bold
                   </Button>
                   <Button
-                      color={(textStyle["fontStyle"] === 'italic' ? 'blue' : 'gray') as MantineColor}
+                      color={(textStyle["fontStyle"] === 'italic' ? 'teal' : '#978ef0') as MantineColor}
                       onClick={() => toggleStyle('fontStyle')}>
                       Toggle Italic
                   </Button>
                   <Button
-                      color={(textStyle["textDecoration"].includes('underline') ? 'blue' : 'gray') as MantineColor}
+                      color={(textStyle["textDecoration"].includes('underline') ? 'teal' : '#978ef0') as MantineColor}
                       onClick={() => toggleStyle('underline')}>
                       Toggle Underline
                   </Button>
                   <Button
-                      color={(textStyle["textDecoration"].includes('line-through') ? 'blue' : 'gray') as MantineColor}
+                      color={(textStyle["textDecoration"].includes('line-through') ? 'teal' : '#978ef0') as MantineColor}
                       onClick={() => toggleStyle('line-through')}>
                       Toggle Strikethrough
                   </Button>
