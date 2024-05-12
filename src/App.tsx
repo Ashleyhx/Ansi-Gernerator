@@ -15,6 +15,7 @@ const headerStyle: React.CSSProperties = {
     color: 'white',
     backgroundColor: '#261168',
     fontWeight: 'bold',
+    fontSize: 24,
 
 };
 
