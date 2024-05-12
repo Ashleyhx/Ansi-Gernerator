@@ -32,12 +32,11 @@ function App() {
   // const [ansiCodeText, setAnsiCodeText] = useState('');
   // const [ansiCodeBackground, setAnsiCodeBackground] = useState('');
   // const [ansiCodeStyle, setAnsiCodeStyle] = useState(';3;4m');
-  const [textStyle, setTextStyle] = useState({
-      fontWeight: 'normal',
-      fontStyle: 'normal',
-      textDecoration: 'none',
-      backgroundColor: 'transparent' // Assuming you want to change this too
-  });
+    const [textStyle, setTextStyle] = useState({
+        fontWeight: 'normal',
+        fontStyle: 'normal',
+        textDecoration: [],
+    });
   const [styleCode, setStyleCode] = useState('');
   const [textCode, setText] = useState('');
   const [textBackground, setTextBackground] = useState('');
@@ -57,13 +56,34 @@ function App() {
         setTextBackground(`\\x1b[48;2;${r};${g};${b}`);
     }, [background]);
 
-  const toggleStyle = (styleProp) => {
-     setTextStyle(prevStyle => ({
-            ...prevStyle,
-            [styleProp]: prevStyle[styleProp] === 'normal' || prevStyle[styleProp] === 'none' ?
-                (styleProp === 'fontWeight' ? 'bold' : styleProp === 'fontStyle' ? 'italic' : 'line-through') : 'normal'
-     }));
-  };
+    const toggleStyle = (styleProp) => {
+        setTextStyle(prevStyle => {
+            if (styleProp === 'fontWeight') {
+                return {
+                    ...prevStyle,
+                    fontWeight: prevStyle.fontWeight === 'normal' ? 'bold' : 'normal'
+                };
+            } else if (styleProp === 'fontStyle') {
+                return {
+                    ...prevStyle,
+                    fontStyle: prevStyle.fontStyle === 'normal' ? 'italic' : 'normal'
+                };
+            } else if (styleProp === 'underline' || styleProp === 'line-through') {
+                const currentDecorations = prevStyle.textDecoration;
+                const isCurrentlySet = currentDecorations.includes(styleProp);
+                const newDecorations = isCurrentlySet
+                    ? currentDecorations.filter(deco => deco !== styleProp)
+                    : [...currentDecorations, styleProp];
+
+                return {
+                    ...prevStyle,
+                    textDecoration: newDecorations
+                };
+            }
+            return prevStyle;
+        });
+    };
+
 
   return (
       <Layout>
@@ -96,7 +116,14 @@ function App() {
               <h2>
                   <span style={{color: color}}>
                     <span style={{backgroundColor: background,}}>
-                        <span style={textStyle}>Test</span>
+                        <span
+                            style={
+                                {
+                                    fontWeight: textStyle.fontWeight,
+                                    fontStyle: textStyle.fontStyle,
+                                    textDecoration: textStyle.textDecoration.join(' ')
+                                } as React.CSSProperties
+                            }>Test</span>
                     </span>
                   </span>
               </h2>
@@ -126,13 +153,13 @@ function App() {
                       Toggle Italic
                   </Button>
                   <Button
-                      color={(textStyle["textDecoration"] === 'line-through' ? 'blue' : 'gray') as MantineColor}
-                      onClick={() => toggleStyle('textDecoration')}>
+                      color={(textStyle["textDecoration"].includes('underline') ? 'blue' : 'gray') as MantineColor}
+                      onClick={() => toggleStyle('underline')}>
                       Toggle Underline
                   </Button>
                   <Button
-                      color={(textStyle["textDecoration"] === 'line-through' ? 'blue' : 'gray') as MantineColor}
-                      onClick={() => toggleStyle('textDecoration')}>
+                      color={(textStyle["textDecoration"].includes('line-through') ? 'blue' : 'gray') as MantineColor}
+                      onClick={() => toggleStyle('line-through')}>
                       Toggle Strikethrough
                   </Button>
               </Flex>
