@@ -59,16 +59,23 @@ function App() {
     const toggleStyle = (styleProp) => {
         setTextStyle(prevStyle => {
             if (styleProp === 'fontWeight') {
+                setStyleCode((prevStyle.fontWeight === 'normal' ? ';1' : '') + styleCode);
                 return {
                     ...prevStyle,
                     fontWeight: prevStyle.fontWeight === 'normal' ? 'bold' : 'normal'
                 };
             } else if (styleProp === 'fontStyle') {
+                setStyleCode((prevStyle.fontStyle === 'normal' ? ';3' : '') + styleCode);
                 return {
                     ...prevStyle,
                     fontStyle: prevStyle.fontStyle === 'normal' ? 'italic' : 'normal'
                 };
             } else if (styleProp === 'underline' || styleProp === 'line-through') {
+                if (styleProp === 'underline') {
+                    setStyleCode((prevStyle.textDecoration.includes('underline') ? ';4' : '') + styleCode);
+                } else {
+                    setStyleCode((prevStyle.textDecoration.includes('line-through') ? ';9' : '') + styleCode);
+                }
                 const currentDecorations = prevStyle.textDecoration;
                 const isCurrentlySet = currentDecorations.includes(styleProp);
                 const newDecorations = isCurrentlySet
@@ -89,7 +96,7 @@ function App() {
       <Layout>
           <Header color='white'>Ansi Code Generator</Header>
           <Content>
-              <p>RGB ANSI Code is: {textCode + textBackground + 'm'}</p>
+              <p>RGB ANSI Code is: {textCode + textBackground + textStyle + 'm'}</p>
 
               <CopyButton value={textCode + textBackground}>
                   {({copied, copy}) => (
