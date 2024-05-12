@@ -21,11 +21,17 @@ const boxStyle: React.CSSProperties = {
     border: '1px solid #40a9ff',
 };
 
-
+const boxStyleButtons: React.CSSProperties = {
+    width: '100%',
+    height: 120,
+    borderRadius: 6,
+    border: '1px solid #40a9ff',
+};
 
 function App() {
   const [ansiCodeText, setAnsiCodeText] = useState('');
   const [ansiCodeBackground, setAnsiCodeBackground] = useState('');
+  const [ansiCodeStyle, setAnsiCodeStyle] = useState(';4m');
   const [textCode, setText] = useState('');
   const [textBackground, setTextBackground] = useState('');
   const [color, setColor] = useState('rgba(255, 0, 0, 1)');
@@ -40,8 +46,8 @@ function App() {
     useEffect(() => {
         const cleanColor = background.replace('rgba(', '').replace(')', '');
         const [r, g, b] = cleanColor.split(',').map((value) => parseInt(value, 10) || 0);
-        setAnsiCodeBackground(`\x1b[48;2;${r};${g};${b}m`);
-        setTextBackground(`\\x1b[48;2;${r};${g};${b}m`);
+        setAnsiCodeBackground(`\x1b[48;2;${r};${g};${b}`);
+        setTextBackground(`\\x1b[48;2;${r};${g};${b}`);
     }, [background]);
 
   return (
@@ -70,7 +76,7 @@ function App() {
                       </Tooltip>
                   )}
               </CopyButton>
-              <h2><Ansi>{`${ansiCodeText}${ansiCodeBackground} Test`}</Ansi></h2>
+              <h2><Ansi>{`${ansiCodeText}${ansiCodeBackground}${ansiCodeStyle}  Test`}</Ansi></h2>
 
               <Flex style={boxStyle} justify='center' align='center' gap='large'>
                   <Stack>
@@ -84,10 +90,23 @@ function App() {
                   </Stack>
               </Flex>
 
+              <Flex style={boxStyleButtons} justify='center' align='center' gap='middle'>
+                  <h3> Styles: </h3>
+                  <Button>
+                      Bold
+                  </Button>
+                  <Button>
+                        Italic
+                  </Button>
+                  <Button>
+                        Underline
+                  </Button>
+                  <Button>
+                      Strickthrough
+                  </Button>
+              </Flex>
 
           </Content>
-
-
       </Layout>
 
   )
